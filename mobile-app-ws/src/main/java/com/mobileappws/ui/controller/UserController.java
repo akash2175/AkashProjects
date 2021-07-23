@@ -9,15 +9,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 
 import com.mobileappws.ui.model.request.UserDetailsModelRequest;
 import com.mobileappws.ui.model.response.UserRest;
 
 @RestController
 @RequestMapping("/user") // http://localhost:9080/user
+//@Validated
 public class UserController {
 
 	@GetMapping()
@@ -37,7 +42,7 @@ public class UserController {
 
 		returnValue.setEmail("akash@333.com");
 		returnValue.setFirstName("Akash");
-		returnValue.setLastName("Dwivedi");
+		returnValue.setLastName("Dubey");
 		returnValue.setUserId(userId);
 
 		return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
@@ -49,7 +54,7 @@ public class UserController {
 
 	)
 	public ResponseEntity<UserDetailsModelRequest> createUser(
-			@RequestBody UserDetailsModelRequest detailsModelRequest) {
+		@Valid	@RequestBody UserDetailsModelRequest detailsModelRequest) {
 
 		UserRest userRest = new UserRest();
 
@@ -60,17 +65,9 @@ public class UserController {
 		return new ResponseEntity<UserDetailsModelRequest>(detailsModelRequest, HttpStatus.CREATED);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
 	@PutMapping
 	public String updateUser() {
-		return "Update User was called!";
+		return "Update User!";
 	}
 
 	@DeleteMapping

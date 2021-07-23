@@ -1,7 +1,14 @@
 package com.mobileappws.ui.model.request;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserDetailsModelRequest {
 	
+	@NotNull(message="First Name can't be Null")
+	@NotEmpty(message="This field Cant be empty")
 	private String firstName;
 	/**
 	 * @return the firstName
@@ -51,8 +58,13 @@ public class UserDetailsModelRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	@NotNull(message = "Last Name can't be empty")
 	private String lastName;
+	@NotNull(message="Email can't be empty")
+	@Email
 	private String email;
+	@NotNull
+	@Size(min = 6,max = 10,message = "Password can be minimum 6 character and maximum 10 chacracter")
 	private String password;
 	
 
