@@ -12,6 +12,7 @@ public class Test123 {
 		super();
 		
 		System.out.println("Hello");
+		System.out.println("world");
 	}
 
 	
