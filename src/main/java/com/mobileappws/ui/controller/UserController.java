@@ -82,7 +82,7 @@ public class UserController {
 
 	@PutMapping
 	public String updateUser() {
-		return "Update User!";
+		return "Update User Details!";
 	}
 
 	@DeleteMapping
