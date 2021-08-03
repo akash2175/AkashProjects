@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,9 @@ import com.mobileappws.ui.model.response.UserRest;
 @RequestMapping("/user") // http://localhost:9080/user
 //@Validated
 public class UserController {
+	
+	
+	Map<String,UserRest> users;     //Map for storing Data.
 
 	@GetMapping()
 	public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -38,14 +45,16 @@ public class UserController {
 	@GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
 
-		UserRest returnValue = new UserRest();
+		if(users.containsKey(userId))
+		{
+			return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
+		}
+		else
+		{
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 
-		returnValue.setEmail("akash@333.com");
-		returnValue.setFirstName("Akash");
-		returnValue.setLastName("Dubey");
-		returnValue.setUserId(userId);
-
-		return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
+		
 	}
 
 	@PostMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
@@ -53,16 +62,22 @@ public class UserController {
 			consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
 
 	)
-	public ResponseEntity<UserDetailsModelRequest> createUser(
+	public ResponseEntity<UserRest> createUser(
 		@Valid	@RequestBody UserDetailsModelRequest detailsModelRequest) {
 
-		UserRest userRest = new UserRest();
+		UserRest returnValue = new UserRest();
 
-		userRest.setFirstName(detailsModelRequest.getFirstName());
-		userRest.setLastName(detailsModelRequest.getLastName());
-		userRest.setEmail(detailsModelRequest.getEmail());
+		returnValue.setFirstName(detailsModelRequest.getFirstName());
+		returnValue.setLastName(detailsModelRequest.getLastName());
+		returnValue.setEmail(detailsModelRequest.getEmail());
+		
+		String userId=UUID.randomUUID().toString();
+		returnValue.setUserId(userId);
+		
+		if(users==null) users=new HashMap();
+		users.put(userId, returnValue);
 
-		return new ResponseEntity<UserDetailsModelRequest>(detailsModelRequest, HttpStatus.CREATED);
+		return new ResponseEntity<UserRest>(returnValue, HttpStatus.CREATED);
 	}
 
 	@PutMapping
